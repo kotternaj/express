@@ -10,8 +10,22 @@ var leaderRouter = require('./routes/leaderRouter');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+const mongoose = require('mongoose');
+mongoose.Promise = require('bluebird');
+
+const Dishes = require('./models/dishes');
 
 var app = express();
+
+//Connection URL
+
+const url = 'mongodb://localhost:27017/confusion';
+const connect = mongoose.connect(url);
+var db = mongoose.connection;
+
+connect.then((db)=> {
+  console.log("Connected correctly to server");
+}, (err) => { console.log(err);  });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
