@@ -41,7 +41,7 @@ promoRouter.route('/')
     .catch((err) => next(err));    
 });
 
-// dishID section
+// promoId section
 promoRouter.route('/:promoId')
 .get((req,res,next)=> {
     Promotions.findById(req.params.promoId)
