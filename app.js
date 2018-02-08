@@ -9,6 +9,8 @@ var promoRouter = require('./routes/promoRouter');
 var leaderRouter = require('./routes/leaderRouter');
 var session = require('express-session');
 var FileStore = require('session-file-store')(session);
+var passport = require('passport');
+var authenticate = require('./authenticate');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -50,27 +52,25 @@ app.use(session({
   store: new FileStore()
 }));
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use('/', index);
 app.use('/users', users);
 
 function auth(req, res, next){
-  console.log(req.session);
-  if (!req.session.user){
+  console.log(req.user);
+  if (!req.user){
         var err = new Error('You are not authenticated!1');
-        err.status = 403;
-        return next(err);
+       res.setHeader('WWW-Authenticate', 'Basic');
+       err.status = 401;
+       next(err);
   }
   else {
-      if (req.session.user === 'authenticated'){
         next();
-      }
-      else {
-          var err = new Error('You are not authenticated!2');
-          err.status = 403;
-          return next(err);
-      }
-   }
+  }
 }
+
 app.use(auth);
 app.use(express.static(path.join(__dirname, 'public')));
 
