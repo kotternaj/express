@@ -13,6 +13,7 @@ var passport = require('passport');
 var authenticate = require('./authenticate');
 var config = require('./config');
 var uploadRouter = require('./routes/uploadRouter');
+var favRouter = require('./routes/favRouter')
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -51,6 +52,8 @@ app.use ('/dishes', dishRouter);
 app.use ('/promotions', promoRouter);
 app.use ('/leaders', leaderRouter);
 app.use ('/imageUpload', uploadRouter);
+app.use ('/favorites', favRouter);
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

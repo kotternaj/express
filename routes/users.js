@@ -60,7 +60,8 @@ router.get('/logout', (req, res,next) => {
 });
 
 router.route('/')
-.get(authenticate.verifyUser, authenticate.verifyAdmin ,(req,res,next) => {
+.options(cors.corsWithOptions, (req, res) => { res.sendStatus(200); })
+.get(cors.cors, authenticate.verifyUser, authenticate.verifyAdmin ,(req,res,next) => {
     User.find({})
     .then((users) => {
         res.statusCode = 200;
