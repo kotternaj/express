@@ -12,6 +12,7 @@ var FileStore = require('session-file-store')(session);
 var passport = require('passport');
 var authenticate = require('./authenticate');
 var config = require('./config');
+var uploadRouter = require('./routes/uploadRouter');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -20,10 +21,7 @@ mongoose.Promise = require('bluebird');
 
 const Dishes = require('./models/dishes');
 
-var app = express();
-
 //Connection URL
-
 const url = config.mongoUrl;
 const connect = mongoose.connect(url);
 var db = mongoose.connection;
@@ -31,6 +29,17 @@ var db = mongoose.connection;
 connect.then((db)=> {
   console.log("Connected correctly to server");
 }, (err) => { console.log(err);  });
+
+var app = express();
+
+app.all('*', (req, res, next) => {
+  if(req.secure){
+    return next();    
+  }
+  else {
+    res.redirect(307, 'https://' + req.hostname + ':' + app.get('secPort') + req.url);
+  }
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -41,6 +50,7 @@ app.set('view engine', 'jade');
 app.use ('/dishes', dishRouter);
 app.use ('/promotions', promoRouter);
 app.use ('/leaders', leaderRouter);
+app.use ('/imageUpload', uploadRouter);
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
