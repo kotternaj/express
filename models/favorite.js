@@ -5,17 +5,17 @@ const Schema = mongoose.Schema;
 
 const favoriteSchema = new Schema({
     user: {
-        type: String,
-        required: true        
+        type: mongoose.Schema.Types.ObjectId,
+        ref : 'User'
     },
-    objectId: {
-        type: String, 
-        required: true
-    },
-    
+    dishes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref : 'Dish'
+    }]
 }, {
-    timestamps: true
+    timestamps : true,
 });
+
 
 var Favorites = mongoose.model('Favorite', favoriteSchema);
 

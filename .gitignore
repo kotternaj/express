@@ -1,2 +1,6 @@
 node_modules
 indexold.js
+.DS_Store
+routes/.DS_Store
+routes/favoriteRouterORIG.js
+angular - udemy notes.html
